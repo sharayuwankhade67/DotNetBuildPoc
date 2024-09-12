@@ -25,9 +25,18 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish MyApp.csproj -c Release -o MyApplication
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
       with:
-        name: MyApplication
-        path: MyApplication/**
-        if-no-files-found: error
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Upload a Build Artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: MyApplication
+    #     path: MyApplication/**
+    #     if-no-files-found: error
